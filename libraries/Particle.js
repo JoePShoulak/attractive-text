@@ -18,37 +18,31 @@ class Particle {
     this.acc.add(vec).limit(this.maxAcc);
   }
 
-  dist(x, y) {
+  dist({ x, y }) {
     return dist(this.pos.x, this.pos.y, x, y);
   }
 
-  seek(x, y) {
+  steer({ x, y }) {
     const predicted = this.pos.copy().add(this.vel);
     const desired = createVector(x, y);
 
-    this.applyForce(desired.sub(predicted).mult(1 / this.dist(x, y)));
+    return desired.sub(predicted);
   }
 
-  avoid(x, y) {
-    const predicted = this.pos.copy().add(this.vel);
-    const desired = createVector(x, y);
+  seek(target) {
+    this.applyForce(this.steer(target));
+  }
 
-    this.applyForce(predicted.sub(desired));
+  avoid(target) {
+    this.applyForce(this.steer(target).mult(-1));
   }
 
   update() {
     this.applyForce(this.gravity);
 
-    if (this.dist(mouseX, mouseY) < this.avoidRadius) {
-      this.avoid(mouseX, mouseY);
-    } else {
-      if (this.dist(this.start.x, this.start.y) > 0.1) {
-        this.seek(this.start.x, this.start.y);
-      } else {
-        this.acc.mult(0);
-        this.vel.mult(0);
-      }
-    }
+    const mouse = { x: mouseX, y: mouseY };
+    if (this.dist(mouse) < this.avoidRadius) this.avoid(mouse);
+    else this.seek(this.start);
 
     this.vel.add(this.acc).limit(this.maxSpeed);
     this.pos.add(this.vel);
