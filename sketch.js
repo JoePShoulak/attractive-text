@@ -1,29 +1,42 @@
 function windowResized() {
   resizeCanvas(innerWidth, innerHeight);
+
+  reset();
 }
 
 let roboto;
 let points;
 const word = "Joe++";
+const widthPad = 0.75;
 
 function preload() {
   roboto = loadFont("./fonts/Roboto-Regular.ttf");
 }
 
+function reset() {
+  textSize(height / 2);
+  while (textWidth(word) > width * widthPad) textSize(textSize() - 1);
+  points = roboto
+    .textToPoints(
+      word,
+      (width - textWidth(word)) / 2,
+      height / 2 + textSize() / 3
+    )
+    .map((p) => new Particle(p));
+}
+
 function setup() {
   createCanvas(innerWidth, innerHeight);
   textFont(roboto);
-  textSize(200);
+
   fill("white");
   noStroke();
 
   background(20);
-  // text(word, 100, height / 2 + 50);
-  points = roboto
-    .textToPoints(word, 100, height / 2 + 50)
-    .map((p) => new Particle(p));
+  reset();
+
   points.forEach(
-    (p) => (p.pos = createVector(random(width), -100 - random(100)))
+    (p) => (p.pos = createVector(random(width), random(-200, -100)))
   );
 }
 
