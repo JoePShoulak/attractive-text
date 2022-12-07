@@ -11,7 +11,7 @@ class Particle {
 
     this.gravity = createVector(0, 0.1);
 
-    this.size = 4;
+    this.size = 5;
   }
 
   applyForce(vec) {
@@ -39,9 +39,16 @@ class Particle {
   update() {
     this.applyForce(this.gravity);
 
-    if (this.dist(mouseX, mouseY) < this.avoidRadius)
+    if (this.dist(mouseX, mouseY) < this.avoidRadius) {
       this.avoid(mouseX, mouseY);
-    else this.seek(this.start.x, this.start.y);
+    } else {
+      if (this.dist(this.start.x, this.start.y) > 0.1) {
+        this.seek(this.start.x, this.start.y);
+      } else {
+        this.acc.mult(0);
+        this.vel.mult(0);
+      }
+    }
 
     this.vel.add(this.acc).limit(this.maxSpeed);
     this.pos.add(this.vel);
