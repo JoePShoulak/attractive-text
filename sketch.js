@@ -7,15 +7,15 @@ function windowResized() {
 let roboto;
 let points;
 const word = "Joe++";
-const widthPad = 0.75;
+const padding = 0.75;
 
 function preload() {
   roboto = loadFont("./fonts/Roboto-Regular.ttf");
 }
 
 function reset() {
-  textSize(height / 2);
-  while (textWidth(word) > width * widthPad) textSize(textSize() - 1);
+  textSize(height * padding);
+  while (textWidth(word) > width * padding) textSize(textSize() - 1);
   points = roboto
     .textToPoints(
       word,
