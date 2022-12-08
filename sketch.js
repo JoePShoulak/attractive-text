@@ -20,7 +20,9 @@ function reset() {
     .textToPoints(
       word,
       (width - textWidth(word)) / 2,
-      height / 2 + textSize() / 3
+      height / 2 + textSize() / 3,
+      textSize(),
+      { sampleFactor: 0.5 }
     )
     .map((p) => new Particle(p));
 }
